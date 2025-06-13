@@ -14,7 +14,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly chatService: ChatService) {}
+  constructor(private readonly chatService: ChatService) { }
 
   async handleConnection(client: Socket) {
     const userId = client.handshake.query.userId as string;
@@ -55,11 +55,20 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('mark-read')
   async markRead(@MessageBody() { messageId }: any) {
     await this.chatService.markRead(messageId);
+    const msg = await this.chatService.getMessageById(messageId);
+    if (msg?.from) {
+      const senderSocketId = await this.chatService.getUserSocket(msg.from);
+      if (senderSocketId) {
+        this.server.to(senderSocketId).emit('read', messageId);
+      }
+    }
   }
+
 
   @SubscribeMessage('get-status')
   async getStatus(@MessageBody() { userId }: any) {
     const status = await this.chatService.getUserStatus(userId);
     return status;
   }
+
 }

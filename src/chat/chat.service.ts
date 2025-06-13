@@ -9,10 +9,14 @@ export class ChatService {
   constructor(
     @InjectModel(Message.name) private messageModel: Model<Message>,
     @InjectModel(UserStatus.name) private userStatusModel: Model<UserStatus>,
-  ) {}
+  ) { }
 
   async saveMessage(data: any) {
     return this.messageModel.create(data);
+  }
+
+  async getMessageById(id: string) {
+    return this.messageModel.findById(id);
   }
 
   async markDelivered(msgId: string) {

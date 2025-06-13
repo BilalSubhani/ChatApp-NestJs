@@ -1,0 +1,19 @@
+body {
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+.chat-app {
+  width: 300px;
+}
+.chat-box {
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: 250px;
+  overflow-y: auto;
+  margin: 10px 0;
+}
+.chat-box p {
+  margin: 5px 0;
+}
